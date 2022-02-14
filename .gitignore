@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+# node
+node_modules/
+package-lock.json
+artifacts
+cache
+
+
 # Distribution / packaging
 .Python
 build/
