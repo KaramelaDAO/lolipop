@@ -1,5 +1,7 @@
 require("@nomiclabs/hardhat-waffle");
 
+const { API_URL_prod, PRIVATE_KEY_prod } = process.env;
+
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
@@ -18,4 +20,14 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 module.exports = {
   solidity: "0.8.8",
+  networks: {
+    maticMumbai: {
+      url: API_URL_prod,
+      accounts: [PRIVATE_KEY_prod],
+      network_id: 80001,
+      //gas: 1000000,
+      gasPrice: web3.utils.toWei('20', 'gwei'), // check https://polygonscan.com/gastracker,
+    }
+  },
+
 };
