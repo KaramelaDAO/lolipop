@@ -8,10 +8,9 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 contract Lollipop is ERC20, Ownable {
     uint256 private immutable _cap = 1000000 * 10**decimals();
 
-    constructor() ERC20("Lollipop", "loll"){
+    constructor() ERC20("Lollipop", "loll") {
         _mint(msg.sender, cap());
     }
-
 
     /**
      * @dev Returns the cap on the token's total supply.

@@ -1,5 +1,7 @@
 require("@nomiclabs/hardhat-waffle");
 
+Web3 = require('web3')
+
 const { API_URL_prod, PRIVATE_KEY_prod } = process.env;
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -22,11 +24,18 @@ module.exports = {
   solidity: "0.8.8",
   networks: {
     maticMumbai: {
-      url: API_URL_prod,
-      accounts: [PRIVATE_KEY_prod],
+      url: `API_URL_prod`,
+      accounts: [`PRIVATE_KEY_prod`],
       network_id: 80001,
       //gas: 1000000,
-      gasPrice: web3.utils.toWei('20', 'gwei'), // check https://polygonscan.com/gastracker,
+      gasPrice: Web3.utils.toWei('40', 'gwei'), // check https://polygonscan.com/gastracker,
+    },
+    maticMain: {
+      url: `API_URL_prod`,
+      accounts: [`PRIVATE_KEY_prod`],
+      network_id: 137,
+      //gas: 1000000,
+      gasPrice: Web3.utils.toWei('50', 'gwei'), // check https://polygonscan.com/gastracker,
     }
   },
 
