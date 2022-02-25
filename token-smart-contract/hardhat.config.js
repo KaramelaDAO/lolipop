@@ -1,4 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
+require('dotenv').config({ path: __dirname + '/.env' })
 
 const { API_URL_prod, PRIVATE_KEY_prod } = process.env;
 
@@ -22,11 +23,8 @@ module.exports = {
   solidity: "0.8.8",
   networks: {
     maticMumbai: {
-      url: API_URL_prod,
-      accounts: [PRIVATE_KEY_prod],
-      network_id: 80001,
-      //gas: 1000000,
-      gasPrice: web3.utils.toWei('20', 'gwei'), // check https://polygonscan.com/gastracker,
+      url: `${API_URL_prod}`,
+      accounts: [`${PRIVATE_KEY_prod}`]
     }
   },
 
