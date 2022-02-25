@@ -1,4 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
+require('dotenv').config({ path: __dirname + '/.env' })
 
 Web3 = require('web3')
 
@@ -24,18 +25,19 @@ module.exports = {
   solidity: "0.8.8",
   networks: {
     maticMumbai: {
-      url: `API_URL_prod`,
-      accounts: [`PRIVATE_KEY_prod`],
+      url: `${API_URL_prod}`,
+      accounts: [`${PRIVATE_KEY_prod}`],
       network_id: 80001,
       //gas: 1000000,
       gasPrice: Web3.utils.toWei('40', 'gwei'), // check https://polygonscan.com/gastracker,
     },
     maticMain: {
-      url: `API_URL_prod`,
-      accounts: [`PRIVATE_KEY_prod`],
+      url: `${API_URL_prod}`,
+      accounts: [`${PRIVATE_KEY_prod}`],
       network_id: 137,
       //gas: 1000000,
       gasPrice: Web3.utils.toWei('50', 'gwei'), // check https://polygonscan.com/gastracker,
+
     }
   },
 
