@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract TreasuryDEX is Ownable {
     using SafeMath for uint256;
+    string public constant VER = "1.0";
 
     uint256 private immutable loll_cap = 1000000 * 10**18;
     address private immutable loll_address =
@@ -35,16 +36,10 @@ contract TreasuryDEX is Ownable {
     }
 
     /**
-     * Swaps $Loll for Ether
+     * Swaps $Loll for Ether - make sure you have approved the amount for $loll first
      */
     function swapLoll(uint256 _amount) public {
         require(etherBalance() > 0, "Treasury is empty");
-
-        uint256 allowance = IERC20(loll_address).allowance(
-            msg.sender,
-            address(this)
-        );
-        require(allowance >= _amount, "Check the token allowance");
 
         IERC20(loll_address).transferFrom(msg.sender, address(this), _amount);
 
@@ -67,5 +62,14 @@ contract TreasuryDEX is Ownable {
      */
     function withdrawEth(uint256 amount) public onlyOwner {
         IERC20(weth_address).transfer(msg.sender, amount);
+    }
+
+    /**
+     * Destroy DEX after sending everything to an address
+     */
+    function destroySmartContract(address payable _to) public onlyOwner {
+        withdrawEth(etherBalance());
+        withdrawLoll(lollBalance());
+        selfdestruct(_to);
     }
 }
