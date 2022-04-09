@@ -17,7 +17,7 @@ export default function ConnectWalletModal({ isOpen, setIsOpen, setWallet, setBa
       let web3;
       if (window.ethereum) {
         window.ethereum.on('accountsChanged', accountsChanged);
-        window.ethereum.on('chainChanged', chainChanged);
+        // window.ethereum.on('chainChanged', chainChanged);
         web3 = new Web3(window.ethereum);
       } else if (window.web3) {
         web3 = new Web3(window.web3.currentProvider);
@@ -28,7 +28,6 @@ export default function ConnectWalletModal({ isOpen, setIsOpen, setWallet, setBa
       // Check if User is already connected by retrieving the accounts
       web3.eth.getAccounts().then(async addr => {
         // Set User account into state
-        setWallet(addr);
         await accountsChanged(addr);
       });
     };
@@ -71,11 +70,12 @@ export default function ConnectWalletModal({ isOpen, setIsOpen, setWallet, setBa
     }
   };
 
-  const chainChanged = () => {
-    setMessage(null);
-    setWallet(null);
-    setBalance(null);
-  };
+  // TODO: Add chainChanged handler
+  // const chainChanged = () => {
+  //   setMessage(null);
+  //   setWallet(null);
+  //   setBalance(null);
+  // };
 
   return (
     <>
