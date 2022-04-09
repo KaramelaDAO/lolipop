@@ -1,29 +1,86 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import { AiOutlineClose } from "react-icons/ai";
-import fox from "../assets/fox.png";
+import { Fragment, useEffect } from 'react';
+import { ethers } from 'ethers';
+import Web3 from 'web3';
+import { Dialog, Transition } from '@headlessui/react';
+import { AiOutlineClose } from 'react-icons/ai';
+import toastTypes from '../types/toastTypes';
+import walletTypes from '../types/walletTypes';
 
-const walletList = [
-  {
-    id: 1,
-    name: "MetaMask",
-    icon: fox,
-  },
-];
-
-export default function ConnectWalletModal({ isOpen, setIsOpen, setWallet }) {
+export default function ConnectWalletModal({ isOpen, setIsOpen, setWallet, setBalance, setMessage, setMessageType }) {
   function closeModal() {
     setIsOpen(false);
   }
 
+  useEffect(() => {
+    const checkConnection = async () => {
+      // Check if browser is running Metamask
+      let web3;
+      if (window.ethereum) {
+        window.ethereum.on('accountsChanged', accountsChanged);
+        window.ethereum.on('chainChanged', chainChanged);
+        web3 = new Web3(window.ethereum);
+      } else if (window.web3) {
+        web3 = new Web3(window.web3.currentProvider);
+      } else {
+        return;
+      }
+
+      // Check if User is already connected by retrieving the accounts
+      web3.eth.getAccounts().then(async addr => {
+        // Set User account into state
+        setWallet(addr);
+        await accountsChanged(addr);
+      });
+    };
+    checkConnection();
+    // react-hooks/exhaustive-deps
+  }, []);
+
+  const connectHandler = async () => {
+    if (window.ethereum) {
+      try {
+        const res = await window.ethereum.request({
+          method: 'eth_requestAccounts',
+        });
+        await accountsChanged(res[0]);
+        setMessage('Account connected successfully');
+        setMessageType(toastTypes.SUCCESS);
+      } catch (err) {
+        console.error(err);
+        setMessage('There was a problem connecting to MetaMask');
+        setMessageType(toastTypes.ERROR);
+      }
+    } else {
+      setMessage('Install MetaMask');
+      setMessageType(toastTypes.WARNING);
+    }
+    setIsOpen(false);
+  };
+
+  const accountsChanged = async newAccount => {
+    setWallet(newAccount);
+    try {
+      const balance = await window.ethereum.request({
+        method: 'eth_getBalance',
+        params: [newAccount.toString(), 'latest'],
+      });
+      setBalance(ethers.utils.formatEther(balance));
+    } catch (err) {
+      console.error(err);
+      setMessage('There was a problem connecting to MetaMask');
+    }
+  };
+
+  const chainChanged = () => {
+    setMessage(null);
+    setWallet(null);
+    setBalance(null);
+  };
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-10 overflow-y-auto bg-black/60"
-          onClose={closeModal}
-        >
+        <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto bg-black/60" onClose={closeModal}>
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
               as={Fragment}
@@ -36,10 +93,7 @@ export default function ConnectWalletModal({ isOpen, setIsOpen, setWallet }) {
             >
               <Dialog.Overlay className="fixed inset-0" />
             </Transition.Child>
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
+            <span className="inline-block h-screen align-middle" aria-hidden="true">
               &#8203;
             </span>
             <Transition.Child
@@ -61,18 +115,14 @@ export default function ConnectWalletModal({ isOpen, setIsOpen, setWallet }) {
                 </div>
 
                 <p className="border-2 border-slate-700 text-sm rounded-md bg-slate-800 p-3 mt-8 mb-5">
-                  By connecting a wallet, you agree to Uniswap Labs’ Terms of
-                  Service and acknowledge that you have read and understand the
-                  Uniswap Protocol Disclaimer.
+                  By connecting a wallet, you agree to Uniswap Labs’ Terms of Service and acknowledge that you have read
+                  and understand the Uniswap Protocol Disclaimer.
                 </p>
 
-                {walletList.map((wallet) => (
+                {walletTypes.map(wallet => (
                   <button
                     key={wallet.id}
-                    onClick={() => {
-                      setWallet(true);
-                      setIsOpen(false);
-                    }}
+                    onClick={connectHandler}
                     className="flex items-center justify-between bg-slate-800 hover:bg-slate-700 w-full font-medium rounded-md p-3 mt-3"
                   >
                     {wallet.name}

@@ -1,6 +1,6 @@
-import { Popover, Switch, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
-import { FiSettings } from "react-icons/fi";
+import { Popover, Switch, Transition } from '@headlessui/react';
+import { Fragment, useState } from 'react';
+import { FiSettings } from 'react-icons/fi';
 
 const Settings = () => {
   const [enabled, setEnabled] = useState(false);
@@ -28,9 +28,7 @@ const Settings = () => {
                 <h1 className="text-sm mt-3">Slippage tolerance ?</h1>
 
                 <div className="flex items-center mt-2">
-                  <button className="px-3 py-1 rounded-full bg-yellow-600 mr-3">
-                    Auto
-                  </button>
+                  <button className="px-3 py-1 rounded-full bg-yellow-600 mr-3">Auto</button>
                   <input
                     type="number"
                     placeholder="0.10"
@@ -57,12 +55,12 @@ const Settings = () => {
                   <Switch
                     checked={enabled}
                     onChange={setEnabled}
-                    className={`${enabled ? "bg-slate-900" : "bg-slate-500"}
+                    className={`${enabled ? 'bg-slate-900' : 'bg-slate-500'}
           relative inline-flex flex-shrink-0 h-[26px] w-[60px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
                   >
                     <span
                       aria-hidden="true"
-                      className={`${enabled ? "translate-x-9" : "translate-x-0"}
+                      className={`${enabled ? 'translate-x-9' : 'translate-x-0'}
             pointer-events-none inline-block h-[22px] w-[24px] rounded-full bg-white shadow-lg transform ring-0 transition ease-in-out duration-200`}
                     />
                   </Switch>
@@ -73,14 +71,12 @@ const Settings = () => {
                   <Switch
                     checked={enabled1}
                     onChange={setEnabled1}
-                    className={`${enabled1 ? "bg-slate-900" : "bg-slate-500"}
+                    className={`${enabled1 ? 'bg-slate-900' : 'bg-slate-500'}
           relative inline-flex flex-shrink-0 h-[26px] w-[60px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
                   >
                     <span
                       aria-hidden="true"
-                      className={`${
-                        enabled1 ? "translate-x-9" : "translate-x-0"
-                      }
+                      className={`${enabled1 ? 'translate-x-9' : 'translate-x-0'}
             pointer-events-none inline-block h-[22px] w-[24px] rounded-full bg-white shadow-lg transform ring-0 transition ease-in-out duration-200`}
                     />
                   </Switch>

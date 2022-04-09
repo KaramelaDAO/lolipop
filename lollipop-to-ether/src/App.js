@@ -1,27 +1,35 @@
-import { useState } from "react";
-import Navbar from "./components/Navbar";
-import Swap from "./components/Swap";
-import ConnectWalletModal from "./components/ConnectWalletModal";
-import Footer from "./components/Footer";
+import { useState } from 'react';
+import AppToast from './components/AppToast';
+import ConnectWalletModal from './components/ConnectWalletModal';
+import Footer from './components/Footer';
+import Navbar from './components/Navbar';
+import Swap from './components/Swap';
 
 function App() {
-  const [wallet, setWallet] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [wallet, setWallet] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState(null);
+  const [balance, setBalance] = useState(null);
+
+  console.log('balance', balance);
 
   return (
     <div className="bg-gradient-to-r from-purpleC to-blue-400 text-white min-h-screen">
-      <Navbar wallet={wallet} setOpenModal={setOpenModal} />
+      <Navbar wallet={wallet} balance={balance} setOpenModal={setOpenModal} />
       <div className="flex justify-center mt-24 px-3">
-        <Swap wallet={wallet} setOpenModal={setOpenModal} />
+        <Swap wallet={wallet} balance={balance} setOpenModal={setOpenModal} />
       </div>
       <Footer />
-
-      {/* ----CONNECT WALLET MODAL----- */}
       <ConnectWalletModal
         isOpen={openModal}
         setIsOpen={setOpenModal}
         setWallet={setWallet}
+        setBalance={setBalance}
+        setMessage={setMessage}
+        setMessageType={setMessageType}
       />
+      <AppToast message={message} messageType={messageType} />
     </div>
   );
 }
