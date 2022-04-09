@@ -213,10 +213,7 @@ const Navbar = ({ wallet, balance, setOpenModal }) => {
             <div className="flex space-x-1">
               <p className="font-medium">{balance || 0.0}</p> <p className="font-medium">ETH</p>
             </div>
-            <p className="truncate p-1 rounded-md bg-slate-800 font-medium">
-              {/*0x8f6d9731B47830b028C7d50ec81066f7f720475A*/}
-              {wallet}
-            </p>
+            <p className="truncate p-1 rounded-md bg-slate-800 font-medium">{wallet}</p>
           </div>
         ) : (
           <button
