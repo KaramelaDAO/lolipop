@@ -210,11 +210,11 @@ const Navbar = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
         {hasRetrievedWallet && (
           <>
             {wallet ? (
-              <div className="flex items-center space-x-4 w-64 px-4 py-2 bg-slate-900 rounded-xl">
+              <div className="flex items-center space-x-4 sm:w-64 px-4 p-2.5 sm:py-2 bg-slate-900 rounded-xl w-28">
                 <div className="flex space-x-1">
                   <p className="font-medium">{balance || 0.0}</p> <p className="font-medium">ETH</p>
                 </div>
-                <p className="truncate p-1 rounded-md bg-slate-800 font-medium">{wallet}</p>
+                <p className="truncate p-1 rounded-md bg-slate-800 font-medium hidden sm:block">{wallet}</p>
               </div>
             ) : (
               <button
