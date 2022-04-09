@@ -12,8 +12,6 @@ function App() {
   const [messageType, setMessageType] = useState(null);
   const [balance, setBalance] = useState(null);
 
-  console.log('balance', balance);
-
   return (
     <div className="bg-gradient-to-r from-purpleC to-blue-400 text-white min-h-screen">
       <Navbar wallet={wallet} balance={balance} setOpenModal={setOpenModal} />
