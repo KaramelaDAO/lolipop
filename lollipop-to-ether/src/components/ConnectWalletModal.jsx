@@ -6,7 +6,15 @@ import { AiOutlineClose } from 'react-icons/ai';
 import toastTypes from '../types/toastTypes';
 import walletTypes from '../types/walletTypes';
 
-export default function ConnectWalletModal({ isOpen, setIsOpen, setWallet, setBalance, setMessage, setMessageType }) {
+export default function ConnectWalletModal({
+  isOpen,
+  setIsOpen,
+  setWallet,
+  setBalance,
+  setMessage,
+  setMessageType,
+  setHasRetrievedWallet,
+}) {
   function closeModal() {
     setIsOpen(false);
   }
@@ -22,14 +30,20 @@ export default function ConnectWalletModal({ isOpen, setIsOpen, setWallet, setBa
       } else if (window.web3) {
         web3 = new Web3(window.web3.currentProvider);
       } else {
+        setHasRetrievedWallet(true);
         return;
       }
 
       // Check if User is already connected by retrieving the accounts
-      web3.eth.getAccounts().then(async addr => {
-        // Set User account into state
-        await accountsChanged(addr);
-      });
+      web3.eth
+        .getAccounts()
+        .then(async addr => {
+          // Set User account into state
+          await accountsChanged(addr);
+        })
+        .finally(() => {
+          setHasRetrievedWallet(true);
+        });
     };
     checkConnection();
     // react-hooks/exhaustive-deps

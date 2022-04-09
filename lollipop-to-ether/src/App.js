@@ -7,16 +7,17 @@ import Swap from './components/Swap';
 
 function App() {
   const [openModal, setOpenModal] = useState(false);
-  const [wallet, setWallet] = useState(false);
+  const [hasRetrievedWallet, setHasRetrievedWallet] = useState(false);
+  const [wallet, setWallet] = useState(null);
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState(null);
   const [balance, setBalance] = useState(null);
 
   return (
     <div className="bg-gradient-to-r from-purpleC to-blue-400 text-white min-h-screen">
-      <Navbar wallet={wallet} balance={balance} setOpenModal={setOpenModal} />
+      <Navbar wallet={wallet} balance={balance} setOpenModal={setOpenModal} hasRetrievedWallet={hasRetrievedWallet} />
       <div className="flex justify-center mt-24 px-3">
-        <Swap wallet={wallet} balance={balance} setOpenModal={setOpenModal} />
+        <Swap wallet={wallet} balance={balance} setOpenModal={setOpenModal} hasRetrievedWallet={hasRetrievedWallet} />
       </div>
       <Footer />
       <ConnectWalletModal
@@ -26,6 +27,7 @@ function App() {
         setBalance={setBalance}
         setMessage={setMessage}
         setMessageType={setMessageType}
+        setHasRetrievedWallet={setHasRetrievedWallet}
       />
       <AppToast message={message} messageType={messageType} />
     </div>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Settings from './Settings';
 import lol from '../assets/images/lol.png';
 
-const Swap = ({ wallet, balance, setOpenModal }) => {
+const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
   const [tokenInputField2, setTokenInputField2] = useState(0);
   const [lolInputField2, setLolInputField2] = useState(0);
 
@@ -59,18 +59,21 @@ const Swap = ({ wallet, balance, setOpenModal }) => {
             )}
           </div>
         </div>
-
-        {wallet ? (
-          <button className="p-3 mt-5 w-full text-xl font-semibold rounded-lg bg-purple-700 bg-opacity-75 hover:bg-opacity-50">
-            Swap
-          </button>
-        ) : (
-          <button
-            onClick={() => setOpenModal(true)}
-            className="p-3 mt-5 w-full rounded-lg font-medium bg-purple-700 bg-opacity-75 hover:bg-opacity-50"
-          >
-            Connect Wallet
-          </button>
+        {hasRetrievedWallet && (
+          <>
+            {wallet ? (
+              <button className="p-3 mt-5 w-full text-xl font-semibold rounded-lg bg-purple-700 bg-opacity-75 hover:bg-opacity-50">
+                Swap
+              </button>
+            ) : (
+              <button
+                onClick={() => setOpenModal(true)}
+                className="p-3 mt-5 w-full rounded-lg font-medium bg-purple-700 bg-opacity-75 hover:bg-opacity-50"
+              >
+                Connect Wallet
+              </button>
+            )}
+          </>
         )}
       </div>
     </>

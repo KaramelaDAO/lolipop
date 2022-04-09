@@ -7,7 +7,7 @@ import { Fragment, useState } from 'react';
 import { FaEthereum } from 'react-icons/fa';
 import { BsArrowUpRightCircleFill } from 'react-icons/bs';
 
-const Navbar = ({ wallet, balance, setOpenModal }) => {
+const Navbar = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
   const [network, setNetwork] = useState('ethereum');
 
   return (
@@ -207,21 +207,24 @@ const Navbar = ({ wallet, balance, setOpenModal }) => {
             </Menu.Items>
           </Transition>
         </Menu>
-
-        {wallet ? (
-          <div className="flex items-center space-x-4 w-64 px-4 py-2 bg-slate-900 rounded-xl">
-            <div className="flex space-x-1">
-              <p className="font-medium">{balance || 0.0}</p> <p className="font-medium">ETH</p>
-            </div>
-            <p className="truncate p-1 rounded-md bg-slate-800 font-medium">{wallet}</p>
-          </div>
-        ) : (
-          <button
-            onClick={() => setOpenModal(true)}
-            className="py-2 px-4 text-xs sm:text-base font-medium rounded-xl bg-redC hover:bg-opacity-90 border-4 border-purpleC"
-          >
-            Connect Wallet
-          </button>
+        {hasRetrievedWallet && (
+          <>
+            {wallet ? (
+              <div className="flex items-center space-x-4 w-64 px-4 py-2 bg-slate-900 rounded-xl">
+                <div className="flex space-x-1">
+                  <p className="font-medium">{balance || 0.0}</p> <p className="font-medium">ETH</p>
+                </div>
+                <p className="truncate p-1 rounded-md bg-slate-800 font-medium">{wallet}</p>
+              </div>
+            ) : (
+              <button
+                onClick={() => setOpenModal(true)}
+                className="py-2 px-4 text-xs sm:text-base font-medium rounded-xl bg-redC hover:bg-opacity-90 border-4 border-purpleC"
+              >
+                Connect Wallet
+              </button>
+            )}
+          </>
         )}
       </div>
     </nav>
