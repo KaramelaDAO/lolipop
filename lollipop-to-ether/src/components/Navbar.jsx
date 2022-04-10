@@ -60,7 +60,7 @@ const Navbar = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute w-56 sm:w-72 mt-3 origin-top-right bg-slate-900 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+            <Menu.Items className="absolute sm:w-44 lg:w-72 mt-3 origin-top-right bg-slate-900 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
               <div className="px-4 py-1">
                 <h1 className="text-lg text-slate-400 my-2">Select a network</h1>
 
@@ -207,14 +207,15 @@ const Navbar = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
             </Menu.Items>
           </Transition>
         </Menu>
+
         {hasRetrievedWallet && (
           <>
             {wallet ? (
-              <div className="flex items-center space-x-4 sm:w-64 px-4 p-2.5 sm:py-2 bg-slate-900 rounded-xl w-28">
+              <div className="flex items-center space-x-4 lg:w-64 md:w-20 sm:pt-3 sm:pb-3 lg:px-4 p-2.5 sm:py-2 bg-slate-900 rounded-xl">
                 <div className="flex space-x-1">
                   <p className="font-medium">{balance || 0.0}</p> <p className="font-medium">ETH</p>
                 </div>
-                <p className="truncate p-1 rounded-md bg-slate-800 font-medium hidden sm:block">{wallet}</p>
+                <p className="truncate p-1 rounded-md bg-slate-800 font-medium hidden lg:block">{wallet}</p>
               </div>
             ) : (
               <button

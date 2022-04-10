@@ -71,7 +71,7 @@ export default function ConnectWalletModal({
   };
 
   const accountsChanged = async newAccount => {
-    setWallet(newAccount);
+    setWallet(newAccount[0]);
     try {
       const balance = await window.ethereum.request({
         method: 'eth_getBalance',
