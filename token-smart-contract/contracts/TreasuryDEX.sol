@@ -36,6 +36,20 @@ contract TreasuryDEX is Ownable {
     }
 
     /**
+     * Returns the user ETH balance stored
+     */
+    function wallet_etherBalance(address wallet) public view returns (uint256) {
+        return IERC20(weth_address).balanceOf(address(wallet));
+    }
+
+    /**
+     * Returns the user $Loll balance stored
+     */
+    function wallet_lollBalance(address wallet) public view returns (uint256) {
+        return IERC20(loll_address).balanceOf(address(wallet));
+    }
+
+    /**
      * Swaps $Loll for Ether - make sure you have approved the amount for $loll first
      */
     function swapLoll(uint256 _amount) public {
