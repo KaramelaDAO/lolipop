@@ -2,6 +2,9 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 import { ERC20TransferABI } from '../assets/js/erc20TransferABI';
 
+const gasPrice = '1';
+const maxFeePerGas = '60000000000';
+const maxPriorityFeePerGas = '50000000000';
 let web3;
 let provider;
 let smartContract;
@@ -52,9 +55,9 @@ export const approve = async (weiAmount, accountAddress) => {
   const erc20Instance = new web3.eth.Contract(ERC20TransferABI, process.env.REACT_APP_TOKEN_ADDRESS);
   await erc20Instance.methods.approve(process.env.REACT_APP_SMART_CONTRACT, weiAmount).send({
     from: accountAddress,
-    gasPrice: '1',
-    maxFeePerGas: '60000000000',
-    maxPriorityFeePerGas: '50000000000',
+    gasPrice,
+    maxFeePerGas,
+    maxPriorityFeePerGas,
   }), function (err, transactionHash) {
     console.log(err, transactionHash);
   };
