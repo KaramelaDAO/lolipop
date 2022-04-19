@@ -13,9 +13,9 @@ contract TreasuryDEX is Ownable {
     address private immutable loll_address =
         0x430e940955c7e8Af9E7A989B4684294e726A3514;
     address private immutable weth_address =
-        0xAd9C60B3826eA2BeD99F308be76d7e10D74cEf66; // this is $Victory - JUST FOR TESTING
+        0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619; // WEth address
 
-    // WEth address -> 0x7ceb23fd6bc0add59e62ac25578270cff1b9f619
+    // 0xAd9C60B3826eA2BeD99F308be76d7e10D74cEf66; // this is $Victory - JUST FOR TESTING
 
     constructor() {
         // nothing
