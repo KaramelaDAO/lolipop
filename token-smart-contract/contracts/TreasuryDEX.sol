@@ -22,18 +22,30 @@ contract TreasuryDEX is Ownable {
     }
 
     /**
-     * Returns the available ETH balance stored in that address
-     * Use the wallet address (address(this)) to see how many tokens are stored
+     * Returns the available ETH balance stored
      */
-    function etherBalance(address wallet) public view returns (uint256) {
+    function etherBalance() public view returns (uint256) {
+        return IERC20(weth_address).balanceOf(address(this));
+    }
+
+    /**
+     * Returns the available $Loll balance stored
+     */
+    function lollBalance() public view returns (uint256) {
+        return IERC20(loll_address).balanceOf(address(this));
+    }
+
+    /**
+     * Returns the user ETH balance stored
+     */
+    function wallet_etherBalance(address wallet) public view returns (uint256) {
         return IERC20(weth_address).balanceOf(address(wallet));
     }
 
     /**
-     * Returns the available $Loll balance stored in that address
-     * Use the wallet address (address(this)) to see how many tokens are stored
+     * Returns the user $Loll balance stored
      */
-    function lollBalance(address wallet) public view returns (uint256) {
+    function wallet_lollBalance(address wallet) public view returns (uint256) {
         return IERC20(loll_address).balanceOf(address(wallet));
     }
 
@@ -41,7 +53,7 @@ contract TreasuryDEX is Ownable {
      * Swaps $Loll for Ether - make sure you have approved the amount for $loll first
      */
     function swapLoll(uint256 _amount) public {
-        require(etherBalance(address(this)) > 0, "Treasury is empty");
+        require(etherBalance() > 0, "Treasury is empty");
 
         IERC20(loll_address).transferFrom(msg.sender, address(this), _amount);
 
@@ -72,8 +84,8 @@ contract TreasuryDEX is Ownable {
      * Destroy DEX after sending everything to an address
      */
     function destroySmartContract(address payable _to) public onlyOwner {
-        withdrawEth(etherBalance(address(this)));
-        withdrawLoll(lollBalance(address(this)));
+        withdrawEth(etherBalance());
+        withdrawLoll(lollBalance());
         selfdestruct(_to);
     }
 }
