@@ -58,9 +58,7 @@ contract TreasuryDEX is Ownable {
         IERC20(loll_address).transferFrom(msg.sender, address(this), _amount);
 
         uint256 loll_to_swap = _amount;
-        uint256 ether_to_send = etherBalance(address(this)).mul(
-            loll_to_swap.div(loll_cap)
-        );
+        uint256 ether_to_send = etherBalance().mul(loll_to_swap).div(loll_cap);
 
         // send ETH to sender
         IERC20(weth_address).transfer(msg.sender, ether_to_send);

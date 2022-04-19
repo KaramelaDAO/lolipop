@@ -35,7 +35,9 @@ export const checkConnection = async (setHasRetrievedWallet, accountsChanged) =>
 };
 
 export const getWalletLollBalance = async account => {
+  console.log('asdsadsa');
   const rawLollBalance = await smartContract.wallet_lollBalance(account);
+  console.log('asdssssssssss');
   return ethers.utils.formatEther(rawLollBalance);
 };
 
