@@ -1,10 +1,9 @@
 import { Fragment, useEffect } from 'react';
-import { ethers } from 'ethers';
-import Web3 from 'web3';
 import { Dialog, Transition } from '@headlessui/react';
 import { AiOutlineClose } from 'react-icons/ai';
 import toastTypes from '../types/toastTypes';
 import walletTypes from '../types/walletTypes';
+import { checkConnection, getWalletLollBalance } from '../utils/api';
 
 export default function ConnectWalletModal({
   isOpen,
@@ -19,33 +18,19 @@ export default function ConnectWalletModal({
     setIsOpen(false);
   }
 
-  useEffect(() => {
-    const checkConnection = async () => {
-      // Check if browser is running Metamask
-      let web3;
-      if (window.ethereum) {
-        window.ethereum.on('accountsChanged', accountsChanged);
-        // window.ethereum.on('chainChanged', chainChanged);
-        web3 = new Web3(window.ethereum);
-      } else if (window.web3) {
-        web3 = new Web3(window.web3.currentProvider);
-      } else {
-        setHasRetrievedWallet(true);
-        return;
-      }
+  const accountsChanged = async newAccount => {
+    try {
+      const balance = await getWalletLollBalance(newAccount[0]);
+      setBalance(balance);
+      setWallet(newAccount[0]);
+    } catch (err) {
+      console.error(err);
+      setMessage('There was a problem connecting to MetaMask');
+    }
+  };
 
-      // Check if User is already connected by retrieving the accounts
-      web3.eth
-        .getAccounts()
-        .then(async addr => {
-          // Set User account into state
-          await accountsChanged(addr);
-        })
-        .finally(() => {
-          setHasRetrievedWallet(true);
-        });
-    };
-    checkConnection();
+  useEffect(async () => {
+    const account = await checkConnection(setHasRetrievedWallet, accountsChanged);
     // react-hooks/exhaustive-deps
   }, []);
 
@@ -56,40 +41,19 @@ export default function ConnectWalletModal({
           method: 'eth_requestAccounts',
         });
         await accountsChanged(res[0]);
-        setMessage('Account connected successfully');
+        setMessage('Account connected successfully!');
         setMessageType(toastTypes.SUCCESS);
       } catch (err) {
         console.error(err);
-        setMessage('There was a problem connecting to MetaMask');
+        setMessage('There was a problem connecting to MetaMask!');
         setMessageType(toastTypes.ERROR);
       }
     } else {
-      setMessage('Install MetaMask');
+      setMessage('Please install MetaMask!');
       setMessageType(toastTypes.WARNING);
     }
     setIsOpen(false);
   };
-
-  const accountsChanged = async newAccount => {
-    setWallet(newAccount[0]);
-    try {
-      const balance = await window.ethereum.request({
-        method: 'eth_getBalance',
-        params: [newAccount.toString(), 'latest'],
-      });
-      setBalance(ethers.utils.formatEther(balance));
-    } catch (err) {
-      console.error(err);
-      setMessage('There was a problem connecting to MetaMask');
-    }
-  };
-
-  // TODO: Add chainChanged handler
-  // const chainChanged = () => {
-  //   setMessage(null);
-  //   setWallet(null);
-  //   setBalance(null);
-  // };
 
   return (
     <>

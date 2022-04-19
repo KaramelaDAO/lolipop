@@ -1,12 +1,23 @@
 import { FaEthereum } from 'react-icons/fa';
 import { AiOutlineArrowDown } from 'react-icons/ai';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Settings from './Settings';
 import lol from '../assets/images/lol.png';
+import { getDexEth, performSwap } from '../utils/api';
 
 const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
-  const [tokenInputField2, setTokenInputField2] = useState(0);
-  const [lolInputField2, setLolInputField2] = useState(0);
+  const [lollInput, setLollInput] = useState(0);
+  const [ethInput, setEthInput] = useState(0);
+
+  useEffect(async () => {
+    if (lollInput > 0) {
+      const dexEthBalance = await getDexEth();
+      setEthInput(dexEthBalance * (lollInput / 1000000));
+    }
+    if (lollInput > balance) {
+      setLollInput(balance);
+    }
+  }, [lollInput]);
 
   return (
     <>
@@ -27,7 +38,7 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
               type="number"
               placeholder="0.0"
               className="py-9 pl-5 pr-32 bg-slate-800 text-2xl w-full rounded-xl focus:outline-none"
-              onChange={e => setLolInputField2(e.target.value)}
+              onChange={e => setLollInput(parseFloat(e.target.value))}
             />
             <div className="flex items-center text-lg font-semibold rounded-lg py-2 px-3 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
               <img src={lol} alt="lol token" className="h-5 mr-2" />
@@ -36,7 +47,7 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
             {wallet && (
               <div className="flex space-x-1 -ml-24 mt-20">
                 <p className="font-medium text-sm text-slate-300">Balance:</p>{' '}
-                <p className="font-medium text-sm text-slate-300">0.000</p>
+                <p className="font-medium text-sm text-slate-300">{balance || 0}</p>
               </div>
             )}
           </div>
@@ -45,24 +56,22 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
               type="number"
               placeholder="0.0"
               className="py-9 pl-5 pr-32 bg-slate-800 text-2xl w-full rounded-xl focus:outline-none"
-              onChange={e => setTokenInputField2(e.target.value)}
+              value={ethInput || 0}
+              disabled={true}
             />
             <div className="flex items-center text-lg font-semibold rounded-lg py-2 px-3 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
               <FaEthereum className="text-[#627eea] text-lg mr-1" />
               ETH
             </div>
-            {wallet && (
-              <div className="flex space-x-1 -ml-24 mt-20">
-                <p className="font-medium text-sm text-slate-300">Balance:</p>{' '}
-                <p className="font-medium text-sm text-slate-300">{balance || 0}</p>
-              </div>
-            )}
           </div>
         </div>
         {hasRetrievedWallet && (
           <>
             {wallet ? (
-              <button className="p-3 mt-5 w-full text-xl font-semibold rounded-lg bg-purple-700 bg-opacity-75 hover:bg-opacity-50">
+              <button
+                className="p-3 mt-5 w-full text-xl font-semibold rounded-lg bg-purple-700 bg-opacity-75 hover:bg-opacity-50"
+                onClick={async () => await performSwap(wallet, lollInput)}
+              >
                 Swap
               </button>
             ) : (
