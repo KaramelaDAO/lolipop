@@ -22,29 +22,33 @@ contract TreasuryDEX is Ownable {
     }
 
     /**
-     * Returns the available ETH balance stored
+     * Returns the available ETH balance stored in that address
+     * Use the wallet address (address(this)) to see how many tokens are stored
      */
-    function etherBalance() public view returns (uint256) {
-        return IERC20(weth_address).balanceOf(address(this));
+    function etherBalance(address wallet) public view returns (uint256) {
+        return IERC20(weth_address).balanceOf(address(wallet));
     }
 
     /**
-     * Returns the available $Loll balance stored
+     * Returns the available $Loll balance stored in that address
+     * Use the wallet address (address(this)) to see how many tokens are stored
      */
-    function lollBalance() public view returns (uint256) {
-        return IERC20(loll_address).balanceOf(address(this));
+    function lollBalance(address wallet) public view returns (uint256) {
+        return IERC20(loll_address).balanceOf(address(wallet));
     }
 
     /**
      * Swaps $Loll for Ether - make sure you have approved the amount for $loll first
      */
     function swapLoll(uint256 _amount) public {
-        require(etherBalance() > 0, "Treasury is empty");
+        require(etherBalance(address(this)) > 0, "Treasury is empty");
 
         IERC20(loll_address).transferFrom(msg.sender, address(this), _amount);
 
         uint256 loll_to_swap = _amount;
-        uint256 ether_to_send = etherBalance().mul(loll_to_swap.div(loll_cap));
+        uint256 ether_to_send = etherBalance(address(this)).mul(
+            loll_to_swap.div(loll_cap)
+        );
 
         // send ETH to sender
         IERC20(weth_address).transfer(msg.sender, ether_to_send);
@@ -68,8 +72,8 @@ contract TreasuryDEX is Ownable {
      * Destroy DEX after sending everything to an address
      */
     function destroySmartContract(address payable _to) public onlyOwner {
-        withdrawEth(etherBalance());
-        withdrawLoll(lollBalance());
+        withdrawEth(etherBalance(address(this)));
+        withdrawLoll(lollBalance(address(this)));
         selfdestruct(_to);
     }
 }
