@@ -41,13 +41,12 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet, setMessage })
     try {
       await performSwap(wallet, lollInput, setSwapText)
       setMessage({
-        messageText: 'Swap successful! Notice: Please refresh after 30 seconds to view updated balance.',
+        messageText: 'Swap successful! Notice: Please refresh the page after 30 seconds to view the account\'s updated balance.',
         messageType: toastTypes.SUCCESS
       });
     } catch (error) {
-      console.error(error);
       setMessage({
-        messageText: 'Swap failed!',
+        messageText: `Swap failed! ${error.message}`,
         messageType: toastTypes.ERROR
       });
     }
