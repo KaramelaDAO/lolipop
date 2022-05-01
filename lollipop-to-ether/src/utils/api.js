@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import { ethers } from 'ethers';
 import { ERC20TransferABI } from '../assets/js/erc20TransferABI';
+import swapStepsTypes from '../types/swapStepsTypes';
 
 const gasPrice = '1';
 const maxFeePerGas = '60000000000';
@@ -35,9 +36,7 @@ export const checkConnection = async (setHasRetrievedWallet, accountsChanged) =>
 };
 
 export const getWalletLollBalance = async account => {
-  console.log('asdsadsa');
   const rawLollBalance = await smartContract.wallet_lollBalance(account);
-  console.log('asdssssssssss');
   return ethers.utils.formatEther(rawLollBalance);
 };
 
@@ -47,7 +46,8 @@ export const getDexEth = async () => {
   return parseFloat(formatEther);
 };
 
-export const performSwap = async (accountAddress, amount) => {
+export const performSwap = async (accountAddress, amount, setSwapText) => {
+  setSwapText(swapStepsTypes.PROCESSING)
   const weiAmount = ethers.utils.parseEther(amount.toString());
   await approve(weiAmount, accountAddress);
   await smartContract.swapLoll(weiAmount);
@@ -61,6 +61,7 @@ export const approve = async (weiAmount, accountAddress) => {
     maxFeePerGas,
     maxPriorityFeePerGas,
   }), function (err, transactionHash) {
-    console.log(err, transactionHash);
+    console.error(err, transactionHash);
+    throw new Error(err);
   };
 }

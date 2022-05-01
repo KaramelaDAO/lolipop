@@ -11,7 +11,6 @@ export default function ConnectWalletModal({
   setWallet,
   setBalance,
   setMessage,
-  setMessageType,
   setHasRetrievedWallet,
 }) {
   function closeModal() {
@@ -25,7 +24,10 @@ export default function ConnectWalletModal({
       setWallet(newAccount[0]);
     } catch (err) {
       console.error(err);
-      setMessage('There was a problem connecting to MetaMask');
+      setMessage({
+        messageText: 'There was a problem connecting to MetaMask.',
+        messageType: toastTypes.ERROR
+      });
     }
   };
 
@@ -41,16 +43,22 @@ export default function ConnectWalletModal({
           method: 'eth_requestAccounts',
         });
         await accountsChanged(res[0]);
-        setMessage('Account connected successfully!');
-        setMessageType(toastTypes.SUCCESS);
+        setMessage({
+          messageText: 'Account connected successfully!',
+          messageType: toastTypes.SUCCESS
+        });
       } catch (err) {
         console.error(err);
-        setMessage('There was a problem connecting to MetaMask!');
-        setMessageType(toastTypes.ERROR);
+        setMessage({
+          messageText: 'There was a problem connecting to MetaMask.',
+          messageType: toastTypes.ERROR
+        });
       }
     } else {
-      setMessage('Please install MetaMask!');
-      setMessageType(toastTypes.WARNING);
+      setMessage({
+        messageText: 'Please install MetaMask!',
+        messageType: toastTypes.WARNING
+      });
     }
     setIsOpen(false);
   };

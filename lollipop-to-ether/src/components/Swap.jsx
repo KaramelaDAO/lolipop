@@ -4,63 +4,102 @@ import { useEffect, useState } from 'react';
 import Settings from './Settings';
 import lol from '../assets/images/lol.png';
 import { getDexEth, performSwap } from '../utils/api';
+import swapStepsTypes from '../types/swapStepsTypes';
+import Spinner from './Spinner';
+import toastTypes from '../types/toastTypes';
 
-const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
-  const [lollInput, setLollInput] = useState(0);
-  const [ethInput, setEthInput] = useState(0);
+const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet, setMessage }) => {
+  const [lollInput, setLollInput] = useState('');
+  const [ethInput, setEthInput] = useState('');
+  const [swapText, setSwapText] = useState(swapStepsTypes.SWAP);
 
   useEffect(async () => {
-    if (lollInput > 0) {
+    const newLollValue = parseFloat(lollInput);
+    if (newLollValue > 0) {
       const dexEthBalance = await getDexEth();
-      setEthInput(dexEthBalance * (lollInput / 1000000));
+      setEthInput(dexEthBalance * (newLollValue / 1000000));
     }
-    if (lollInput > balance) {
-      setLollInput(balance);
-    }
+    if (newLollValue <= 0) setEthInput(0);
+    if (isNaN(newLollValue)) setEthInput(undefined);
   }, [lollInput]);
+
+  const onChangeLollValue = (e) => {
+    const accountBalance = parseFloat(balance);
+    const newLollValue = parseFloat(e.target.value);
+    if (newLollValue > accountBalance) {
+      setLollInput(accountBalance);
+      return;
+    }
+    if (isNaN(newLollValue)) {
+      setLollInput('');
+      return;
+    }
+    setLollInput(newLollValue);
+  };
+
+  const onSwap = async () => {
+    try {
+      await performSwap(wallet, lollInput, setSwapText)
+      setMessage({
+        messageText: 'Swap successful! Notice: Please refresh after 30 seconds to view updated balance.',
+        messageType: toastTypes.SUCCESS
+      });
+    } catch (error) {
+      console.error(error);
+      setMessage({
+        messageText: 'Swap failed!',
+        messageType: toastTypes.ERROR
+      });
+    }
+    setSwapText(swapStepsTypes.SWAP);
+  }
 
   return (
     <>
       <div className="p-4 w-[500px] bg-slate-900 rounded-xl">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-medium">Swap</h1>
-          <Settings />
+          <Settings/>
         </div>
         <div className="relative">
           <button
             disabled={true}
             className="bg-slate-700 p-1 text-sm border-4 border-slate-900 rounded-md absolute top-[95px] left-[46%]"
           >
-            <AiOutlineArrowDown />
+            <AiOutlineArrowDown/>
           </button>
           <div className="flex items-center mt-8">
             <input
               type="number"
               placeholder="0.0"
               className="py-9 pl-5 pr-32 bg-slate-800 text-2xl w-full rounded-xl focus:outline-none"
-              onChange={e => setLollInput(parseFloat(e.target.value))}
+              defaultValue={lollInput}
+              onChange={onChangeLollValue}
             />
-            <div className="flex items-center text-lg font-semibold rounded-lg py-2 px-3 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
-              <img src={lol} alt="lol token" className="h-5 mr-2" />
+            <div
+              className="flex items-center text-lg font-semibold rounded-lg py-2 px-3 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
+              <img src={lol} alt="lol token" className="h-5 mr-2"/>
               LOL
             </div>
             {wallet && (
-              <div className="flex space-x-1 -ml-24 mt-20">
+              <div className="flex space-x-1 -ml-21 mt-20">
                 <p className="font-medium text-sm text-slate-300">Balance:</p>{' '}
                 <p className="font-medium text-sm text-slate-300">{balance || 0}</p>
               </div>
             )}
           </div>
           <div className="flex items-center mt-3">
-            <input
-              type="number"
-              placeholder="0.0"
+            <div
+              contentEditable="true"
+              suppressContentEditableWarning="true"
+              data-ph="0.0"
               className="py-9 pl-5 pr-32 bg-slate-800 text-2xl w-full rounded-xl focus:outline-none"
-              value={ethInput || 0}
-              disabled={true}
-            />
-            <div className="flex items-center text-lg font-semibold rounded-lg py-2 px-3 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
-              <FaEthereum className="text-[#627eea] text-lg mr-1" />
+            >
+              {ethInput}
+            </div>
+            <div
+              className="flex items-center text-lg font-semibold rounded-lg py-2 px-3 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
+              <FaEthereum className="text-[#627eea] text-lg mr-1"/>
               ETH
             </div>
           </div>
@@ -69,10 +108,14 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
           <>
             {wallet ? (
               <button
+                disabled={!lollInput || lollInput <= 0 || swapText === swapStepsTypes.PROCESSING}
                 className="p-3 mt-5 w-full text-xl font-semibold rounded-lg bg-purple-700 bg-opacity-75 hover:bg-opacity-50"
-                onClick={async () => await performSwap(wallet, lollInput)}
+                onClick={onSwap}
               >
-                Swap
+                {swapText === swapStepsTypes.PROCESSING && (
+                  <Spinner/>
+                )}
+                {swapText}
               </button>
             ) : (
               <button

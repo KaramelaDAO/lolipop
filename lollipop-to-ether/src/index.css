@@ -32,6 +32,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type="number"] {
-  -moz-appearance: textfield;
+[contentEditable=true]:empty:not(:focus):before{
+  content:attr(data-ph);
+  color: rgb(155,163,175);
 }

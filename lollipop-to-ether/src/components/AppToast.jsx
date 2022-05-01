@@ -2,10 +2,12 @@ import React, { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const AppToast = ({ message, messageType }) => {
+const AppToast = ({ message }) => {
+  if (!message || Object.keys(message).length === 0) return null;
   useEffect(() => {
-    if (!message || !messageType) return;
-    toast[messageType](message, {
+    const { messageText, messageType } = message;
+    if (!messageText || !messageType) return;
+    toast[messageType](messageText, {
       position: 'bottom-center',
       autoClose: 5000,
       hideProgressBar: false,
@@ -14,7 +16,7 @@ const AppToast = ({ message, messageType }) => {
       draggable: true,
       progress: undefined,
     });
-  }, [message, messageType]);
+  }, [message]);
 
   return (
     <div>

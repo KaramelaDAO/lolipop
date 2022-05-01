@@ -10,26 +10,30 @@ function App() {
   const [hasRetrievedWallet, setHasRetrievedWallet] = useState(false);
   const [wallet, setWallet] = useState(null);
   const [message, setMessage] = useState(null);
-  const [messageType, setMessageType] = useState(null);
   const [balance, setBalance] = useState(null);
 
   return (
     <div className="bg-gradient-to-r from-purpleC to-blue-400 text-white min-h-screen">
-      <Navbar balance={balance} hasRetrievedWallet={hasRetrievedWallet} wallet={wallet} setOpenModal={setOpenModal} />
+      <Navbar balance={balance} hasRetrievedWallet={hasRetrievedWallet} wallet={wallet} setOpenModal={setOpenModal}/>
       <div className="flex justify-center mt-24 px-3">
-        <Swap wallet={wallet} balance={balance} setOpenModal={setOpenModal} hasRetrievedWallet={hasRetrievedWallet} />
+        <Swap
+          wallet={wallet}
+          balance={balance}
+          setOpenModal={setOpenModal}
+          hasRetrievedWallet={hasRetrievedWallet}
+          setMessage={setMessage}
+        />
       </div>
-      <Footer />
+      <Footer/>
       <ConnectWalletModal
         isOpen={openModal}
         setIsOpen={setOpenModal}
         setBalance={setBalance}
         setHasRetrievedWallet={setHasRetrievedWallet}
         setMessage={setMessage}
-        setMessageType={setMessageType}
         setWallet={setWallet}
       />
-      <AppToast message={message} messageType={messageType} />
+      <AppToast message={message} />
     </div>
   );
 }
