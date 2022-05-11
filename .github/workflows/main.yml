@@ -14,9 +14,8 @@ jobs:
       with:
         node-version: 14
     - name: Install dependencies
-      run: |
-        working-directory: ./lollipop-to-ether/
-        npm install 
+      run: working-directory: ./lollipop-to-ether/
+      run: npm install 
     - name: Build the prod site
       run: |
         working-directory: ./lollipop-to-ether/
