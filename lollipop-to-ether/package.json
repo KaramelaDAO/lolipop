@@ -2,7 +2,7 @@
   "name": "lollipop-to-ether",
   "version": "0.0.1",
   "private": true,
-  "homepage": "https://KaramelaDAO.github.io/react-gh-pages",
+  "homepage": "https://KaramelaDAO.github.io/",
   "dependencies": {
     "@headlessui/react": "^1.5.0",
     "@testing-library/jest-dom": "^5.16.2",
