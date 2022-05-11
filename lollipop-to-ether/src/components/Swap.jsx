@@ -18,8 +18,9 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet, setMessage })
     const newLollValue = parseFloat(lollInput);
     if (newLollValue > 0) {
       const dexEthBalance = await getDexEth();
-      const newEthValue = convertToDecimal(dexEthBalance * (newLollValue / 1000000), 10);
-      return setEthValue(fromExponential(newEthValue));
+      const newEthValue =
+        fromExponential(convertToDecimal(dexEthBalance * (newLollValue / 1000000), 10));
+      return setEthValue(newEthValue > dexEthBalance ? dexEthBalance : newEthValue);
     }
     if (newLollValue <= 0) return setEthValue(0);
     if (isNaN(newLollValue)) return setEthValue(undefined);
