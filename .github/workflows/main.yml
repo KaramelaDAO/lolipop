@@ -18,12 +18,14 @@ jobs:
     - name: Install dependencies
       run: |
         npm install 
+        working-directory: $${env.working-directory}}
     - name: Build the prod site
       run: |
         npm run build
+        working-directory: $${env.working-directory}}
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@4.1.3
       with: 
         branch: gh-pages
-        folder: build
+        folder: $${env.working-directory}}/build
         clean: true
