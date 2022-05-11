@@ -22,6 +22,8 @@ export const checkConnection = async (setHasRetrievedWallet, accountsChanged) =>
     return;
   }
 
+  web3.eth.transactionBlockTimeout = 10000;
+
   provider = new ethers.providers.Web3Provider(web3.currentProvider);
   const signer = provider.getSigner();
   smartContract = new ethers.Contract(process.env.REACT_APP_SMART_CONTRACT, process.env.REACT_APP_SMART_CONTRACT_ABI, signer);
@@ -57,13 +59,16 @@ export const performSwap = async (accountAddress, amount, setSwapText) => {
 
 export const approve = async (weiAmount, accountAddress) => {
   const erc20Instance = new web3.eth.Contract(ERC20TransferABI, process.env.REACT_APP_TOKEN_ADDRESS);
-  await erc20Instance.methods.approve(process.env.REACT_APP_SMART_CONTRACT, weiAmount).send({
-    from: accountAddress,
-    gasPrice,
-    maxFeePerGas,
-    maxPriorityFeePerGas,
-  }), function (err, transactionHash) {
-    console.error(err, transactionHash);
-    throw new Error(err);
-  };
+  const approvedAllowance = await erc20Instance.methods.allowance(accountAddress,  process.env.REACT_APP_SMART_CONTRACT).call();
+  if (approvedAllowance === '0') {
+    await erc20Instance.methods.approve(process.env.REACT_APP_SMART_CONTRACT, ethers.utils.parseEther('1000000')).send({
+      from: accountAddress,
+      gasPrice,
+      maxFeePerGas,
+      maxPriorityFeePerGas,
+    }), function (err, transactionHash) {
+      console.error(err, transactionHash);
+      throw new Error(err);
+    };
+  }
 }
