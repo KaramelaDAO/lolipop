@@ -4,7 +4,7 @@ const Footer = () => {
       <a href="!#" className="font-semibold">
         Legal and Terms
       </a>
-      <p className="text-white font-medium mt-2">&copy; {new Date().getFullYear()} Karamela DAO, LLC</p>
+      <p className="text-white font-medium mt-2">&copy; {new Date().getFullYear()} Karamela DAO</p>
     </footer>
   );
 };

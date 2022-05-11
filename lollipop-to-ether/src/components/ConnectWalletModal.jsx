@@ -101,8 +101,8 @@ export default function ConnectWalletModal({
                 </div>
 
                 <p className="border-2 border-slate-700 text-sm rounded-md bg-slate-800 p-3 mt-8 mb-5">
-                  By connecting a wallet, you agree to Uniswap Labs’ Terms of Service and acknowledge that you have read
-                  and understand the Uniswap Protocol Disclaimer.
+                  By connecting a wallet, you agree to KaramelaDAO's Terms of Service and acknowledge that you have read
+                  and understand that this a highly experimental protocol that can result in loss of assets.
                 </p>
 
                 {walletTypes.map(wallet => (

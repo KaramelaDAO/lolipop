@@ -1,7 +1,6 @@
 import { FaEthereum } from 'react-icons/fa';
 import { AiOutlineArrowDown } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
-import Settings from './Settings';
 import lol from '../assets/images/lol.png';
 import { getDexEth, performSwap } from '../utils/api';
 import swapStepsTypes from '../types/swapStepsTypes';
@@ -58,14 +57,13 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet, setMessage })
       <div className="p-4 w-[500px] bg-slate-900 rounded-xl">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-medium">Swap</h1>
-          <Settings/>
         </div>
         <div className="relative">
           <button
             disabled={true}
             className="bg-slate-700 p-1 text-sm border-4 border-slate-900 rounded-md absolute top-[95px] left-[46%]"
           >
-            <AiOutlineArrowDown/>
+            <AiOutlineArrowDown />
           </button>
           <div className="flex items-center mt-8">
             <input
@@ -77,8 +75,8 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet, setMessage })
             />
             <div
               className="flex items-center text-lg font-semibold rounded-lg py-2 px-3 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
-              <img src={lol} alt="lol token" className="h-5 mr-2"/>
-              LOL
+              <img src={lol} alt="lol token" className="h-5 mr-2" />
+              LOLL
             </div>
             {wallet && (
               <div className="flex space-x-1 -ml-21 mt-20">
@@ -98,7 +96,7 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet, setMessage })
             </div>
             <div
               className="flex items-center text-lg font-semibold rounded-lg py-2 px-3 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
-              <FaEthereum className="text-[#627eea] text-lg mr-1"/>
+              <FaEthereum className="text-[#627eea] text-lg mr-1" />
               ETH
             </div>
           </div>
@@ -112,7 +110,7 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet, setMessage })
                 onClick={onSwap}
               >
                 {swapText === swapStepsTypes.PROCESSING && (
-                  <Spinner/>
+                  <Spinner />
                 )}
                 {swapText}
               </button>
