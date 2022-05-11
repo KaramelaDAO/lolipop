@@ -6,8 +6,6 @@ __pycache__/
 # C extensions
 *.so
 
-.env
-
 # node
 node_modules/
 package-lock.json
