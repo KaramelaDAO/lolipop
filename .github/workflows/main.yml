@@ -5,13 +5,14 @@ on:
     branches:
       - main
 
+defaults:
+  run:
+    working-directory: ./lollipop-to-ether/
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env: 
-      working-directory: ./lollipop-to-ether/
     steps:
-      working-directory: ./lollipop-to-ether/
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
@@ -26,5 +27,5 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@4.1.3
       with: 
         branch: gh-pages
-        folder: $${env.working-directory}}/build
+        folder: /lollipop-to-ether/build
         clean: true
