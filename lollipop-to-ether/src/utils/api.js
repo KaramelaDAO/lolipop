@@ -2,6 +2,7 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 import { ERC20TransferABI } from '../assets/js/erc20TransferABI';
 import swapStepsTypes from '../types/swapStepsTypes';
+import { convertToDecimal } from './helpers';
 
 const gasPrice = '1';
 const maxFeePerGas = '60000000000';
@@ -37,7 +38,8 @@ export const checkConnection = async (setHasRetrievedWallet, accountsChanged) =>
 
 export const getWalletLollBalance = async account => {
   const rawLollBalance = await smartContract.wallet_lollBalance(account);
-  return ethers.utils.formatEther(rawLollBalance);
+  const formattedLollBalance = ethers.utils.formatEther(rawLollBalance);
+  return convertToDecimal(formattedLollBalance, 4);
 };
 
 export const getDexEth = async () => {

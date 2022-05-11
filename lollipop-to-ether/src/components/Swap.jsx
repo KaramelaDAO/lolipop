@@ -1,25 +1,28 @@
+import { useEffect, useState } from 'react';
 import { FaEthereum } from 'react-icons/fa';
 import { AiOutlineArrowDown } from 'react-icons/ai';
-import { useEffect, useState } from 'react';
+import fromExponential from 'from-exponential';
 import lol from '../assets/images/lol.png';
-import { getDexEth, performSwap } from '../utils/api';
 import swapStepsTypes from '../types/swapStepsTypes';
-import Spinner from './Spinner';
 import toastTypes from '../types/toastTypes';
+import { getDexEth, performSwap } from '../utils/api';
+import Spinner from './Spinner';
+import { convertToDecimal } from '../utils/helpers';
 
 const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet, setMessage }) => {
   const [lollInput, setLollInput] = useState('');
-  const [ethInput, setEthInput] = useState('');
+  const [ethValue, setEthValue] = useState('');
   const [swapText, setSwapText] = useState(swapStepsTypes.SWAP);
 
   useEffect(async () => {
     const newLollValue = parseFloat(lollInput);
     if (newLollValue > 0) {
       const dexEthBalance = await getDexEth();
-      setEthInput(dexEthBalance * (newLollValue / 1000000));
+      const newEthValue = convertToDecimal(dexEthBalance * (newLollValue / 1000000), 10);
+      return setEthValue(fromExponential(newEthValue));
     }
-    if (newLollValue <= 0) setEthInput(0);
-    if (isNaN(newLollValue)) setEthInput(undefined);
+    if (newLollValue <= 0) return setEthValue(0);
+    if (isNaN(newLollValue)) return setEthValue(undefined);
   }, [lollInput]);
 
   const onChangeLollValue = (e) => {
@@ -70,18 +73,18 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet, setMessage })
               type="number"
               placeholder="0.0"
               className="py-9 pl-5 pr-32 bg-slate-800 text-2xl w-full rounded-xl focus:outline-none"
-              defaultValue={lollInput}
+              value={lollInput}
               onChange={onChangeLollValue}
             />
             <div
-              className="flex items-center text-lg font-semibold rounded-lg py-2 px-3 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
+              className="flex items-center text-lg font-semibold rounded-lg py-2 px-1.5 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
               <img src={lol} alt="lol token" className="h-5 mr-2" />
               LOLL
             </div>
             {wallet && (
-              <div className="flex space-x-1 -ml-21 mt-20">
+              <div className="flex space-x-1 -ml-28 mt-20">
                 <p className="font-medium text-sm text-slate-300">Balance:</p>{' '}
-                <p className="font-medium text-sm text-slate-300">{balance || 0}</p>
+                <p className="font-medium text-sm text-slate-300">{balance.toFixed(4) || 0}</p>
               </div>
             )}
           </div>
@@ -92,10 +95,10 @@ const Swap = ({ wallet, balance, setOpenModal, hasRetrievedWallet, setMessage })
               data-ph="0.0"
               className="py-9 pl-5 pr-32 bg-slate-800 text-2xl w-full rounded-xl focus:outline-none"
             >
-              {ethInput}
+              {ethValue}
             </div>
             <div
-              className="flex items-center text-lg font-semibold rounded-lg py-2 px-3 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
+              className="flex items-center text-lg font-semibold rounded-lg py-2 px-3.5 bg-slate-900 bg-opacity-60 hover:bg-opacity-50 -ml-[103px]">
               <FaEthereum className="text-[#627eea] text-lg mr-1" />
               ETH
             </div>
