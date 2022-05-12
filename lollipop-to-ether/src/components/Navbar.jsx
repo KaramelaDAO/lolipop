@@ -7,7 +7,7 @@ const Navbar = ({ wallet, balance, setOpenModal, hasRetrievedWallet }) => {
       <img src={logo} alt="logo" className="h-12 sm:h-20" />
 
       <div className="flex items-center space-x-2 sm:space-x-6">
-
+        <span class="bg-gray-300 p-2 rounded-md text-gray-800 text-sm"> <a target="_blank" href="https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask/"> Make sure you are on Polygon Network</a></span>
         {hasRetrievedWallet && (
           <>
             {wallet ? (
