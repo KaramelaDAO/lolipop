@@ -12,6 +12,9 @@ let provider;
 let smartContract;
 
 export const checkConnection = async (setHasRetrievedWallet, accountsChanged) => {
+  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && !window.web3) {
+    window.open(`dapp://${window.location.host}`)
+  }
   if (window.ethereum) {
     window.ethereum.on('accountsChanged', accountsChanged);
     web3 = new Web3(window.ethereum);
