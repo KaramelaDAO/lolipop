@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 import { ERC20TransferABI } from '../assets/js/erc20TransferABI';
 import swapStepsTypes from '../types/swapStepsTypes';
-import { convertToDecimal } from './helpers';
+import { convertToDecimal, isMobileAgent } from './helpers';
 
 const gasPrice = '1';
 const maxFeePerGas = '60000000000';
@@ -12,7 +12,7 @@ let provider;
 let smartContract;
 
 export const checkConnection = async (setHasRetrievedWallet, accountsChanged) => {
-  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && !window.web3) {
+  if(isMobileAgent() && !window.web3) {
     window.open(`dapp://${window.location.host}`)
   }
   if (window.ethereum) {
