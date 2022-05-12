@@ -12,6 +12,8 @@ let provider;
 let smartContract;
 
 export const checkConnection = async (setHasRetrievedWallet, accountsChanged) => {
+  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    window.location.href = 'https://metamask.app.link/dapp/dex.karameladao.com/';
   if (window.ethereum) {
     window.ethereum.on('accountsChanged', accountsChanged);
     web3 = new Web3(window.ethereum);
